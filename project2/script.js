@@ -1,33 +1,23 @@
-
 function fibonacci(n) {
     let a = 0, b = 1;
-    let result = [];
 
-    for (let i = 0; i < n; i++) {
-        result.push(a);
+    for (let i = 1; i <= n; i++) {
+        console.log(a);
         let next = a + b;
         a = b;
         b = next;
     }
-
-    console.log(result.join(", "));
 }
-
-
-fibonacci(9); 
-
-function sumOfDigits(num) {
+function sum(num) {
     let sum = 0;
 
     while (num > 0) {
-        sum += num % 10;
-        num = Math.floor(num / 10);
+        sum = sum + (num % 10);
+        num = (num - (num % 10)) / 10;
     }
 
     return sum;
 }
-
-console.log(sumOfDigits(123));
 
 
 function isPalindrome(num) {
@@ -35,8 +25,9 @@ function isPalindrome(num) {
     let reverse = 0;
 
     while (num > 0) {
-        reverse = reverse * 10 + (num % 10);
-        num = Math.floor(num / 10);
+        let digit = num % 10;
+        reverse = reverse * 10 + digit;
+        num = (num - digit) / 10;
     }
 
     if (original === reverse) {
@@ -46,23 +37,15 @@ function isPalindrome(num) {
     }
 }
 
-
-isPalindrome(121);
-
-
-
-function factorial(num) {
+function factorial(n) {
     let fact = 1;
 
-    for (let i = 1; i <= num; i++) {
-        fact *= i;
+    for (let i = 1; i <= n; i++) {
+        fact = fact * i;
     }
 
     return fact;
 }
-
-
-console.log(factorial(5));
 
 
 
@@ -70,12 +53,12 @@ function reversenumber(num) {
     let reverse = 0;
 
     while (num > 0) {
-        reverse = reverse * 10 + (num % 10);
-        num = math.floor(num / 10);
+        let digit = num % 10;
+        reverse = reverse * 10 + digit;
+        num = (num - digit) / 10;
     }
 
     return reverse;
 }
 
 
-console.log(reversenumber(123));

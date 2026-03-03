@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Premium Weather App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body id="body" class="min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 flex items-center justify-center p-6 transition-all duration-700">
+
+  <div class="w-full max-w-md bg-white/10 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl border border-white/20 text-white">
+
+    <h1 class="text-3xl font-bold text-center mb-6 tracking-wide">
+      🌤 Weather App
+    </h1>
+    <div class="flex gap-3 mb-6">
+      <input 
+        id="cityInput"
+        type="text"
+        placeholder="Enter city name..."
+        class="flex-1 px-4 py-3 rounded-xl bg-white/20 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
+      />
+      <button 
+        onclick="getWeather()"
+        class="bg-white/20 hover:bg-white/40 px-5 rounded-xl transition font-semibold">
+        Search
+      </button>
+    </div>
+
+    <div id="loading" class="text-center hidden">
+      <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-white mx-auto"></div>
+      <p class="mt-2 text-sm opacity-80">Fetching weather...</p>
+    </div>
+    <div id="weatherCard" class="hidden text-center">
+
+      <h2 id="cityName" class="text-2xl font-semibold"></h2>
+      <p id="date" class="text-sm opacity-70 mb-4"></p>
+
+      <div class="text-6xl font-extrabold mb-2" id="temperature"></div>
+      <p id="description" class="capitalize text-lg mb-6"></p>
+
+      <div class="grid grid-cols-2 gap-6 text-sm">
+        <div>
+          <p class="opacity-70">Humidity</p>
+          <p id="humidity" class="font-semibold"></p>
+        </div>
+        <div>
+          <p class="opacity-70">Wind Speed</p>
+          <p id="wind" class="font-semibold"></p>
+        </div>
+      </div>
+
+    </div>
+
+
+    <p id="error" class="text-center text-red-300 mt-4 hidden"></p>
+
+  </div>
+
+<script>
+  const API_KEY = "4666a655901f609c6142219a2fc13e6b"; 
+
+  const body = document.getElementById("body");
+  const loading = document.getElementById("loading");
+  const weatherCard = document.getElementById("weatherCard");
+  const errorText = document.getElementById("error");
+
+  async function getWeather() {
+    const city = document.getElementById("cityInput").value.trim();
+  
+    if (!city) return;
+
+    weatherCard.classList.add("hidden");
+    errorText.classList.add("hidden");
+    loading.classList.remove("hidden");
+
+    try {
+      const res = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
+      );
+
+      if (!res.ok) throw new Error("City not found");
+
+      const data = await res.json();
+
+      document.getElementById("cityName").textContent = data.name;
+      document.getElementById("date").textContent = new Date().toDateString();
+      document.getElementById("temperature").textContent = Math.round(data.main.temp) + "°C";
+      document.getElementById("description").textContent = data.weather[0].description;
+      document.getElementById("humidity").textContent = data.main.humidity + "%";
+      document.getElementById("wind").textContent = data.wind.speed + " m/s";
+
+      changeBackground(data.main.temp);
+
+      loading.classList.add("hidden");
+      weatherCard.classList.remove("hidden");
+
+    } catch (err) {
+      loading.classList.add("hidden");
+      errorText.textContent = "❌ City not found. Please try again.";
+      errorText.classList.remove("hidden");
+    }
+  }
+
+  function changeBackground(temp) {
+    if (temp <= 10) {
+      body.className = "min-h-screen bg-gradient-to-br from-blue-800 to-cyan-900 flex items-center justify-center p-6 transition-all duration-700";
+    } 
+    else if (temp <= 25) {
+      body.className = "min-h-screen bg-gradient-to-br from-green-700 to-emerald-900 flex items-center justify-center p-6 transition-all duration-700";
+    } 
+    else {
+      body.className = "min-h-screen bg-gradient-to-br from-orange-600 to-red-800 flex items-center justify-center p-6 transition-all duration-700";
+    }
+  }
+</script>
+
+</body>
+</html>

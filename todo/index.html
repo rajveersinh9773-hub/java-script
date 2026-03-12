@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Todo App</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-green-100 min-h-screen flex items-center justify-center">
+
+<div class="bg-white shadow-xl rounded-2xl w-96 p-6">
+  
+  <h1 class="text-3xl font-bold text-center text-green-500 mb-4">
+    Todo List
+  </h1>
+
+  <div class="flex gap-2 mb-4">
+    <input 
+      id="todoInput"
+      type="text"
+      placeholder="Add a task..."
+      class="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+    >
+    <button 
+      onclick="addTodo()"
+      class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg"
+    >
+      Add
+    </button>
+  </div>
+
+  <ul id="todoList" class="space-y-2"></ul>
+
+</div>
+
+<script>
+
+function addTodo() {
+  const input = document.getElementById("todoInput");
+  const text = input.value.trim();
+
+  if(text === "") return;
+
+  const li = document.createElement("li");
+  li.className = "flex justify-between items-center bg-green-50 px-3 py-2 rounded-lg";
+
+  li.innerHTML = `
+    <span class="cursor-pointer flex-1" onclick="toggleDone(this)">
+      ${text}
+    </span>
+    <button onclick="deleteTodo(this)" class="text-green-500 hover:text-red-500 font-bold ml-2">
+      ✕
+    </button>
+  `;
+
+  document.getElementById("todoList").appendChild(li);
+
+  input.value = "";
+}
+
+function deleteTodo(btn){
+  btn.parentElement.remove();
+}
+
+function toggleDone(el){
+  el.classList.toggle("line-through");
+  el.classList.toggle("text-gray-400");
+}
+
+</script>
+
+</body>
+</html>
